@@ -27,6 +27,7 @@ def check_data_loop():
             alert_subject = "Превышено пороговое значение ошибок 4xx!"
             alert_text = str(err_4xx_percentage)+"% обращений ("+str(errors_4xx)+"/"+str(total_count)+") вернули код ошибки 4xx!"
             mail.sendmail(alert_type, alert_subject, alert_text)
+            
 
     if err_5xx_percentage < conf.quality_gate:
         print("It's fine! Server errors is " +str(err_5xx_percentage)+ "%")
@@ -34,7 +35,7 @@ def check_data_loop():
         print("Server errors is " +str(err_5xx_percentage)+ "%! Sending e-mail...")
         alert_type = "firing"
         alert_subject = "Превышено пороговое значение ошибок 5xx!"
-        alert_text = str(err_4xx_percentage)+"% обращений ("+str(errors_4xx)+"/"+str(total_count)+") вернули код ошибки 5xx!"
+        alert_text = str(err_5xx_percentage)+"% обращений ("+str(errors_5xx)+"/"+str(total_count)+") вернули код ошибки 5xx!"
         mail.sendmail(alert_type, alert_subject, alert_text)
 
 def get_metrics(url, time, gte, lte):
