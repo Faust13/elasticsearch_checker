@@ -1,18 +1,21 @@
-import configparser
+import yaml
 from datetime import timedelta
 
+with open("config.yml", 'r') as stream:
+    try:
+        config = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
 
-config = configparser.ConfigParser()
-config.read('checker.ini')
-es_host = config['ELASTICSEARCH']['host']
-es_port = config['ELASTICSEARCH']['port']
-es_index = config['ELASTICSEARCH']['index']
-stats_for = config['REQUEST']['stats_for']
-quality_gate = int(config['RULES']['quality_gate'])
-period = timedelta(seconds=int(config['REQUEST']['interval']))
-email_from = config['EMAIL']['from']
-email_passwd = config['EMAIL']['password']
-email_receivers = config['EMAIL']['to']
+es_host = config['elasticsearch']['host']
+es_port = config['elasticsearch']['port']
+es_index = config['elasticsearch']['index']
+stats_for = config['request']['stats_for']
+quality_gate = int(config['rules']['quality_gate'])
+period = timedelta(seconds=config['request']['interval'])
+email_from = config['email']['from']
+email_passwd = config['email']['password']
+email_receivers = config['email']['to']
 
 
 headers = {'Content-type': 'application/json'}

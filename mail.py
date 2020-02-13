@@ -25,29 +25,21 @@ def main():
 
     s = smtplib.SMTP(host='localhost')
     s.starttls()
-    s.login(from_address, password)
-
-    # For each contact, send the email:
+    
     for email in notify_to:
-        msg = MIMEMultipart()       # create a message
+        msg = MIMEMultipart()
 
-        # add in the actual person name to the message template
         message = message_template.render(alert_subject=alert_subject, alert_type=alert_type, alert_text=alert_text)
 
-        # Prints out the message body for our sake
         print(message)
 
-        # setup the parameters of the message
         msg['From']=from_address
         msg['To']=email
         
         
-        # add in the message body
-        msg.attach(MIMEText(message, 'plain'))
+        msg.attach(MIMEText(message, 'html'))
         
-        # send the message via the server set up earlier.
         s.send_message(msg)
         del msg
         
-    # Terminate the SMTP session and close the connection
     s.quit()
