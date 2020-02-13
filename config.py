@@ -10,6 +10,7 @@ with open("config.yml", 'r') as stream:
 es_host = config['elasticsearch']['host']
 es_port = config['elasticsearch']['port']
 es_index = config['elasticsearch']['index']
+kibana_url = config['elasticsearch']['kibana_url']
 stats_for = config['request']['stats_for']
 quality_gate = int(config['rules']['quality_gate'])
 period = timedelta(seconds=config['request']['interval'])

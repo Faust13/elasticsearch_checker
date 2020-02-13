@@ -3,6 +3,7 @@ import config as conf
 import verification as check
 import simplejson as json
 import requests
+import mail
 
 tl = Timeloop()
 
@@ -22,6 +23,10 @@ def check_data_loop():
     else:
         if err_4xx_percentage > conf.quality_gate:
             print("Client errors is " +str( err_4xx_percentage)+ "%! Sending e-mail...")
+            alert_type = "firing"
+            alert_subject = "Превышено пороговое значение ошибок 4xx!"
+            alert_text = err_4xx_percentage+"% обращений ("+errors_4xx+"/"+total_count+") вернули код ошибки 4xx!"
+            mail.sendmail(alert_type, alert_subject, alert_text)
 
     if err_5xx_percentage < conf.quality_gate:
         print("It's fine! Server errors is " +str(err_5xx_percentage)+ "%")

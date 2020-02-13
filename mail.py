@@ -10,9 +10,7 @@ from email.mime.text import MIMEText
 from_address = conf.email_from
 password = conf.email_passwd
 notify_to = conf.email_receivers
-alert_subject="test123"
-alert_type = "firing"
-alert_text = "text"
+
 
 def read_template(filename):
 
@@ -20,7 +18,7 @@ def read_template(filename):
         template_file_content = template_file.read()
     return Template(template_file_content)
 
-def main():
+def sendmail(alert_type, alert_subject, alert_text):
     message_template = read_template('alert.j2')
 
     s = smtplib.SMTP(host='localhost')
@@ -29,7 +27,7 @@ def main():
     for email in notify_to:
         msg = MIMEMultipart()
 
-        message = message_template.render(alert_subject=alert_subject, alert_type=alert_type, alert_text=alert_text)
+        message = message_template.render(alert_subject=alert_subject, alert_type=alert_type, alert_text=alert_text, dashboard_url=conf.kibana_url)
 
         print(message)
 
