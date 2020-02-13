@@ -25,7 +25,7 @@ def check_data_loop():
             print("Client errors is " +str( err_4xx_percentage)+ "%! Sending e-mail...")
             alert_type = "firing"
             alert_subject = "Превышено пороговое значение ошибок 4xx!"
-            alert_text = err_4xx_percentage+"% обращений ("+errors_4xx+"/"+total_count+") вернули код ошибки 4xx!"
+            alert_text = str(err_4xx_percentage)+"% обращений ("+str(errors_4xx)+"/"+str(total_count)+") вернули код ошибки 4xx!"
             mail.sendmail(alert_type, alert_subject, alert_text)
 
     if err_5xx_percentage < conf.quality_gate:
