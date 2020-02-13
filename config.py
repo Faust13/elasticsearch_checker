@@ -3,7 +3,7 @@ from datetime import timedelta
 
 
 config = configparser.ConfigParser()
-config.read('checker.conf')
+config.read('checker.ini')
 es_host = config['ELASTICSEARCH']['host']
 es_port = config['ELASTICSEARCH']['port']
 es_index = config['ELASTICSEARCH']['index']
