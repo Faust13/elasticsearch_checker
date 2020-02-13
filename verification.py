@@ -10,8 +10,8 @@ def time():
         raise SystemExit("ERROR: Value of variable 'time' is incorrect: %s" % time)
     
 def url():
-    url_checker = config.es_host+":"+config.es_port+"/_cluster/health"
-    url = config.es_host+":"+config.es_port+"/"+config.es_index+"/_count"
+    url_checker = config.es_host+":"+str(config.es_port)+"/_cluster/health"
+    url = config.es_host+":"+str(config.es_port)+"/"+config.es_index+"/_count"
     if re.match(r"^(http|https):\/\/[^ ]*$", url):
         r = requests.get(url_checker, headers=config.headers)
         result = r.json()
