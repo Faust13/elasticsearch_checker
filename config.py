@@ -10,5 +10,9 @@ es_index = config['ELASTICSEARCH']['index']
 stats_for = config['REQUEST']['stats_for']
 quality_gate = int(config['RULES']['quality_gate'])
 period = timedelta(seconds=int(config['REQUEST']['interval']))
+email_from = config['EMAIL']['from']
+email_passwd = config['EMAIL']['password']
+email_receivers = config['EMAIL']['to']
+
 
 headers = {'Content-type': 'application/json'}
