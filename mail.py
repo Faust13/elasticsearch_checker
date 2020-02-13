@@ -12,7 +12,7 @@ password = conf.email_passwd
 notify_to = conf.email_receivers
 
 
-def read_template(filename):
+def read_template(filename:str) -> Template:
 
     with open(filename, 'r', encoding='utf-8') as template_file:
         template_file_content = template_file.read()

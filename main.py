@@ -51,19 +51,19 @@ def get_metrics(url, time, gte, lte):
     else:
         data = {
             "query":{
-                "bool": {
+                "bool":{
                     "must":[
                             {
-                            "range" : {
-                                "code" : {
+                            "range":{
+                                "code":{
                                     "gte" : gte,
                                     "lte" : lte
                                 }
                             }
                         },
                         {
-                            "range": {
-                                "@timestamp": {
+                            "range":{
+                                "@timestamp":{
                                     "gt": "now-"+time
                                 }
                             }
