@@ -29,8 +29,6 @@ def sendmail(alert_type, alert_subject, alert_text):
 
         message = message_template.render(alert_subject=alert_subject, alert_type=alert_type, alert_text=alert_text, dashboard_url=conf.kibana_url)
 
-        print(message)
-
         msg['From']=from_address
         msg['To']=email
         

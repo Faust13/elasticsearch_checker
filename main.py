@@ -32,10 +32,14 @@ def check_data_loop():
         print("It's fine! Server errors is " +str(err_5xx_percentage)+ "%")
     else:
         print("Server errors is " +str(err_5xx_percentage)+ "%! Sending e-mail...")
+        alert_type = "firing"
+        alert_subject = "Превышено пороговое значение ошибок 5xx!"
+        alert_text = str(err_4xx_percentage)+"% обращений ("+str(errors_4xx)+"/"+str(total_count)+") вернули код ошибки 5xx!"
+        mail.sendmail(alert_type, alert_subject, alert_text)
 
 def get_metrics(url, time, gte, lte):
     if gte == 0 and lte == 0:
-        data = {"query":{"range": {"@timestamp": {"gt": "now-"+time}}}}
+        data = {"query":{"range": {"@timestamp": {"gt": "now-"time}}}}
     else:
         data = {"query":{"bool": {"must":[{"range" : {"code" : {"gte" : gte,"lte" : lte}}},{"range": {"@timestamp": {"gt": "now-"+time}}}]}}}
 
