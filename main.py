@@ -39,9 +39,39 @@ def check_data_loop():
 
 def get_metrics(url, time, gte, lte):
     if gte == 0 and lte == 0:
-        data = {"query":{"range": {"@timestamp": {"gt": "now-"time}}}}
+        data = {
+            "query":{
+                    "range":{
+                        "@timestamp":{
+                            "gt": "now-"+time
+                        }
+                    }
+                }
+            }
     else:
-        data = {"query":{"bool": {"must":[{"range" : {"code" : {"gte" : gte,"lte" : lte}}},{"range": {"@timestamp": {"gt": "now-"+time}}}]}}}
+        data = {
+            "query":{
+                "bool": {
+                    "must":[
+                            {
+                            "range" : {
+                                "code" : {
+                                    "gte" : gte,
+                                    "lte" : lte
+                                }
+                            }
+                        },
+                        {
+                            "range": {
+                                "@timestamp": {
+                                    "gt": "now-"+time
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
 
     r = requests.get(url, data=json.dumps(data), headers=conf.headers)
     result = r.json()
