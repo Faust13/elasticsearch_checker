@@ -3,17 +3,16 @@ import simplejson as json
 import requests
 import config
 
-def time():
-    if re.match(r"^\d*(m|h|d|w|M|y)$", config.stats_for):
-        return config.stats_for
-    else:
-        raise SystemExit("ERROR: Value of variable 'time' is incorrect: %s" % time)
+def check_time(stats_for):
+    if not re.match(r"^\d*(m|h|d|w|M|y)$", stats_for):
+        raise SystemExit("ERROR: Value of variable 'time' is incorrect: %s" % stats_for)
     
-def url():
-    url_checker = config.es_host+":"+str(config.es_port)+"/_cluster/health"
-    url = config.es_host+":"+str(config.es_port)+"/"+config.es_index+"/_count"
+def check_url(es_host, es_port, es_index) -> str:
+    url_checker = f"{es_host}:{es_port}/_cluster/health"
+    print(url_checker)
+    url = es_host+":"+str(es_port)+"/"+es_index+"/_count"
     if re.match(r"^(http|https):\/\/[^ ]*$", url):
-        r = requests.get(url_checker, headers=config.headers)
+        r = requests.get(url_checker)
         result = r.json()
         if result['status'] == 'green' or result['status'] == 'yellow':
             return url
