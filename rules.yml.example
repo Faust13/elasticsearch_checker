@@ -1,0 +1,12 @@
+rules:
+  - name: '5xx'
+    request:
+      query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 500, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
+      query_total: '{"query":{"range":{"@timestamp":{"gt": "now-"+time}}}}'
+      target_index: 'nginx-access-*'
+
+  - alert: '4xx'
+    request:
+      query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 400, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
+      query_total: '{"query":{"range":{"@timestamp":{"gt": "now-"+time}}}}'
+      target_index: 'nginx-access-*'

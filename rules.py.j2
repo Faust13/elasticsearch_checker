@@ -7,7 +7,6 @@ import requests
 import mail
 
 {% for alert in alerts %}
-{% if alert['type'] is defined %}
 
 @tl.job(interval=conf.PERIOD)
 def check_data_{{ alert['name'] }}_loop():
