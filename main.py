@@ -1,7 +1,7 @@
 from timeloop import Timeloop
 import config as conf
 from verification import check_time, check_url
-import time
+import time as timer
 import simplejson as json
 import requests
 import mail
@@ -30,7 +30,7 @@ def check_data(err_count, err_code, total_count):
         alert_subject = f"Превышено пороговое значение ошибок {err_code}!"
         alert_text = f"{err_percentage}% обращений ({err_count}/{total_count}) вернули код ошибки {err_code}!"
         mail.sendmail(alert_type, alert_subject, alert_text)
-        time.sleep(600)
+        timer.sleep(600)
 
 def get_metrics(url, time, gte, lte):
     if gte == 0 and lte == 0:
