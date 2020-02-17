@@ -2,7 +2,7 @@ import yaml
 from datetime import timedelta
 import sys
 
-with open("config.yml", 'r') as stream:
+with open("./conf/config.yml", 'r') as stream:
     try:
         config = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
@@ -11,7 +11,6 @@ with open("config.yml", 'r') as stream:
 
 ES_HOST = config['elasticsearch'].get('host', '127.0.0.1')
 ES_PORT = config['elasticsearch'].get('port', '9200')
-ES_INDEX = config['elasticsearch']['index']
 KIBANA_URL = config['elasticsearch']['kibana_url']
 STATS_FOR = config['request']['stats_for']
 QUALITY_GATE = int(config['rules'].get('quality_gate', 10))
