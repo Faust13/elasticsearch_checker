@@ -6,12 +6,21 @@ import simplejson as json
 import requests
 import mail
 
+total_data = {
+    "query":{
+        "range":{
+            "@timestamp":{
+                "gt": "now-"+time
+            }
+        }
+    }
+}
+
 {% for alert in alerts %}
 
 @tl.job(interval=conf.PERIOD)
 def check_data_{{ alert['name'] }}_loop():
     data = {{ alert['request']['query'] }}
-    total_data = {{ alert['request']['query_total'] }} 
     errors_{{ alert['name'] }} = get_count(url, time, data)
     total_count = get_count(url, time, total_data)
     check_count(errors_{{ alert['name'] }}, {{ alert['name'] }}, total_count)

@@ -1,12 +1,16 @@
 rules:
+  # avaible metrics:
+  # - err_precentage
+  # - err_count
+  # - total_count
   - name: '5xx'
+    expr: err_percentage > 5
     request:
       query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 500, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
-      query_total: '{"query":{"range":{"@timestamp":{"gt": "now-"+time}}}}'
       target_index: 'nginx-access-*'
 
   - alert: '4xx'
+    expr: err_percentage > 5
     request:
       query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 400, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
-      query_total: '{"query":{"range":{"@timestamp":{"gt": "now-"+time}}}}'
       target_index: 'nginx-access-*'
