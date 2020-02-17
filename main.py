@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import yaml
 from timeloop import Timeloop
 from jinja2 import Environment, FileSystemLoader
