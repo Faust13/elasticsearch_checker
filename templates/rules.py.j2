@@ -23,6 +23,7 @@ total_data = {
 
 {% for alert in alerts %}
 
+{% if 'count' in alert['type'] %}
 url_{{ alert['name']}} = check_url(conf.ES_HOST, conf.ES_PORT, "{{ alert['request']['target_index'] }}")
 
 
@@ -45,7 +46,7 @@ def check_count_{{ alert['name'] }}(err_count, err_code, total_count):
     else:
         print(f"It's fine! Percentage of errors {err_code} is {err_percentage}% ({err_count}/{total_count})")
         
-
+{% endif %}
 {% endfor %}
 
 

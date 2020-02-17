@@ -43,6 +43,7 @@ Rules file looks like:
 rules:
   - name: '5xx' #alert name
     expr: err_percentage > 5 # when expression is true application will send alert.
+    type: 'count' #type of metric. Only 'count' supported now.
     request: #info for request
       query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 500, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}' #query for search
       target_index: 'nginx-access-*' #target index name
@@ -50,6 +51,7 @@ rules:
 
   - alert: '4xx'
     expr: err_percentage > 5
+    type: 'count' #type of metric. Only 'count' supported now.
     request:
       query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 400, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
       target_index: 'nginx-access-*'
