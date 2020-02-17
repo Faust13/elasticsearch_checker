@@ -6,11 +6,13 @@ import simplejson as json
 import requests
 import mail
 
+tl = Timeloop()
+
 total_data = {
     "query":{
         "range":{
             "@timestamp":{
-                "gt": "now-"+time
+                "gt": f"now-{time}"
             }
         }
     }
@@ -25,7 +27,6 @@ def check_data_{{ alert['name'] }}_loop():
     total_count = get_count(url, time, total_data)
     check_count(errors_{{ alert['name'] }}, {{ alert['name'] }}, total_count)
 
-{% endif %}
 {% endfor %}
 def check_count(err_count, err_code, total_count):
     err_percentage = round(err_count * 100 / total_count, 2)

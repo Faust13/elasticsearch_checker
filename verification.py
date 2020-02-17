@@ -10,7 +10,7 @@ def check_time(stats_for):
 def check_url(es_host, es_port, es_index) -> str:
     url_checker = f"{es_host}:{es_port}/_cluster/health"
     print(url_checker)
-    url = es_host+":"+str(es_port)+"/"+es_index+"/_count"
+    url = f"{es_host}:{es_port}/{es_index}/_count"
     if re.match(r"^(http|https):\/\/[^ ]*$", url):
         r = requests.get(url_checker)
         result = r.json()
