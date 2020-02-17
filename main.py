@@ -13,5 +13,3 @@ if __name__ == '__main__': #generate rules
     with open("rules.py", "w") as fh:
         fh.write(rules_py)
     import rules
-
-)
