@@ -7,9 +7,6 @@ request:
   stats_for: '10m'
   interval: 1
 
-rules:
-  quality_gate: 6
-
 email:
   from: 'monit@example.ru'
   to:

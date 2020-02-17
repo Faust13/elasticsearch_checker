@@ -29,9 +29,6 @@ Look to `./conf/*.examples` files to know more.
 - `stats_for` - time interval for monitoring. Like a kibana time interval format: `10m`/`5h`/etc. Default is `10m`.
 - `interval` - scrape interval in seconds. Default is `5` seconds.
 
-#### rules
-`rules` !!!must be removed in future releases!!!:
-- `quality_gate` - if precentage of count more than `quality_gate` then send alert.
 
 #### email
 `email` contains info for email notification:
@@ -45,15 +42,17 @@ Rules file looks like:
 ```yaml
 rules:
   - name: '5xx' #alert name
-    expr: err_percentage > 5 #expression (not used now)
+    expr: err_percentage > 5 # when expression is true application will send alert.
     request: #info for request
       query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 500, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}' #query for search
       target_index: 'nginx-access-*' #target index name
+    silence: 600 #if alert was sent - sleep for %silence% seconds
 
   - alert: '4xx'
     expr: err_percentage > 5
     request:
       query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 400, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
       target_index: 'nginx-access-*'
+    silence: 600 
 ```
 This tool can looks only for counts. To learn about Elasticsearch's count API please, read the [documetation](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-count.html)

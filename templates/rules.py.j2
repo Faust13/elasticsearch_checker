@@ -31,21 +31,23 @@ def check_data_{{ alert['name'] }}_loop():
     data = {{ alert['request']['query'] }}
     errors_{{ alert['name'] }} = get_count(url_{{ alert['name']}}, time, data)
     total_count = get_count(url_{{ alert['name']}}, time, total_data)
-    check_count(errors_{{ alert['name'] }}, "{{ alert['name'] }}", total_count)
+    check_count_{{ alert['name'] }}(errors_{{ alert['name'] }}, "{{ alert['name'] }}", total_count)
 
-{% endfor %}
-
-def check_count(err_count, err_code, total_count):
+def check_count_{{ alert['name'] }}(err_count, err_code, total_count):
     err_percentage = round(err_count * 100 / total_count, 2)
-    if err_percentage < conf.QUALITY_GATE:
-        print(f"It's fine! Percentage of errors {err_code} is {err_percentage}% ({err_count}/{total_count})")
-    else:
+    if {{ alert['expr'] }}:
         print(f"Percentage of errors {err_code} is {err_percentage}%! Sending e-mail...")
         alert_type = "firing"
         alert_subject = f"A lot of errors {err_code}!"
         alert_text = f" more than {err_percentage}% ({err_count}/{total_count}) requests return {err_code}"
         mail.sendmail(alert_type, alert_subject, alert_text)
-        timer.sleep(600)
+        timer.sleep({{ alert['silence'] }})
+    else:
+        print(f"It's fine! Percentage of errors {err_code} is {err_percentage}% ({err_count}/{total_count})")
+        
+
+{% endfor %}
+
 
 def get_count(url, time, data):
     r = requests.get(url, data=json.dumps(data), headers=conf.HEADERS)
