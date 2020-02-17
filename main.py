@@ -1,5 +1,8 @@
 import yaml
+from timeloop import Timeloop
 from jinja2 import Environment, FileSystemLoader
+
+
 
 if __name__ == '__main__':
     config_data = yaml.load(open('./conf/rules.yml'))
@@ -10,5 +13,8 @@ if __name__ == '__main__':
     with open("rules.py", "w") as fh:
         fh.write(rules_py)
 
+
+    tl = Timeloop()
     import rules
+
     tl.start(block=True)
