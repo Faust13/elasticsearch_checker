@@ -6,7 +6,7 @@ import simplejson as json
 import requests
 import mail
 
-
+tl = Timeloop()
 time = conf.STATS_FOR
 check_time(time)
 
@@ -29,8 +29,8 @@ url_{{ alert['name']}} = check_url(conf.ES_HOST, conf.ES_PORT, "{{ alert['reques
 @tl.job(interval=conf.PERIOD)
 def check_data_{{ alert['name'] }}_loop():
     data = {{ alert['request']['query'] }}
-    errors_{{ alert['name'] }} = get_count(url, time, data)
-    total_count = get_count(url, time, total_data)
+    errors_{{ alert['name'] }} = get_count(url_{{ alert['name']}}, time, data)
+    total_count = get_count(url_{{ alert['name']}}, time, total_data)
     check_count(errors_{{ alert['name'] }}, "{{ alert['name'] }}", total_count)
 
 {% endfor %}
@@ -38,7 +38,7 @@ def check_data_{{ alert['name'] }}_loop():
 def check_count(err_count, err_code, total_count):
     err_percentage = round(err_count * 100 / total_count, 2)
     if err_percentage < conf.QUALITY_GATE:
-        print(f"It's fine! Percentage of errors {err_code} is {err_percentage}%")
+        print(f"It's fine! Percentage of errors {err_code} is {err_percentage}% ({err_count}/{total_count})")
     else:
         print(f"Percentage of errors {err_code} is {err_percentage}%! Sending e-mail...")
         alert_type = "firing"
@@ -52,3 +52,5 @@ def get_count(url, time, data):
     result = r.json()
     count = result['count']
     return count
+
+tl.start(block=True)

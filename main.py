@@ -4,7 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': #generate rules
     config_data = yaml.load(open('./conf/rules.yml'))
     print(config_data)
     env = Environment(loader = FileSystemLoader('./templates'),   trim_blocks=True, lstrip_blocks=True)
@@ -12,9 +12,6 @@ if __name__ == '__main__':
     rules_py = template.render(config_data)
     with open("rules.py", "w") as fh:
         fh.write(rules_py)
-
-
-    tl = Timeloop()
     import rules
 
-    tl.start(block=True)
+)
