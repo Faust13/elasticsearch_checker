@@ -18,11 +18,13 @@ total_data = {
     }
 }
 
+time = conf.STATS_FOR
+check_time(time)
+
 {% for alert in alerts %}
 
 url_{{ alert['name']}} = check_url(conf.ES_HOST, conf.ES_PORT, alert['target_index'])
-time = conf.STATS_FOR
-check_time(time)
+
 
 @tl.job(interval=conf.PERIOD)
 def check_data_{{ alert['name'] }}_loop():
