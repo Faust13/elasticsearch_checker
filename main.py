@@ -1,10 +1,5 @@
-from timeloop import Timeloop
 import config as conf
 from verification import check_time, check_url
-import time as timer
-import simplejson as json
-import requests
-import mail
 
 
 if __name__ == '__main__':
