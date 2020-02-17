@@ -20,6 +20,10 @@ total_data = {
 
 {% for alert in alerts %}
 
+url_{{ alert['name']}} = check_url(conf.ES_HOST, conf.ES_PORT, alert['target_index'])
+time = conf.STATS_FOR
+check_time(time)
+
 @tl.job(interval=conf.PERIOD)
 def check_data_{{ alert['name'] }}_loop():
     data = {{ alert['request']['query'] }}
@@ -28,6 +32,7 @@ def check_data_{{ alert['name'] }}_loop():
     check_count(errors_{{ alert['name'] }}, {{ alert['name'] }}, total_count)
 
 {% endfor %}
+
 def check_count(err_count, err_code, total_count):
     err_percentage = round(err_count * 100 / total_count, 2)
     if err_percentage < conf.QUALITY_GATE:
