@@ -1,7 +1,6 @@
 elasticsearch:
   host: 'http://192.168.255.1'
   port: 9200
-  index: 'nginx-access-*'
   kibana_url: 'http://kibanaurl.ru/app/kibana#/dashboard/e7aac500-49b8-11ea-9397-e9a9cddae543'
 
 request:
@@ -10,17 +9,9 @@ request:
 
 rules:
   quality_gate: 6
-  watch_for:
-    4xx:
-      gte: 400
-      lte: 499
-    5xx:
-      gte: 500
-      lte: 599
 
 email:
   from: 'monit@example.ru'
-  password: 'test123'
   to:
     - somebody@gmail.com
     - someone@yandex.ru

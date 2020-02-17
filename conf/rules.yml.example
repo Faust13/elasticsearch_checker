@@ -1,8 +1,4 @@
 rules:
-  # avaible metrics:
-  # - err_precentage
-  # - err_count
-  # - total_count
   - name: '5xx'
     expr: err_percentage > 5
     request:
