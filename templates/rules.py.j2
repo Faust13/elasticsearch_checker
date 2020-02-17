@@ -6,7 +6,9 @@ import simplejson as json
 import requests
 import mail
 
-tl = Timeloop()
+
+time = conf.STATS_FOR
+check_time(time)
 
 total_data = {
     "query":{
@@ -18,12 +20,10 @@ total_data = {
     }
 }
 
-time = conf.STATS_FOR
-check_time(time)
 
 {% for alert in alerts %}
 
-url_{{ alert['name']}} = check_url(conf.ES_HOST, conf.ES_PORT, alert['target_index'])
+url_{{ alert['name']}} = check_url(conf.ES_HOST, conf.ES_PORT, "{{ alert['request']['target_index'] }}")
 
 
 @tl.job(interval=conf.PERIOD)
@@ -31,7 +31,7 @@ def check_data_{{ alert['name'] }}_loop():
     data = {{ alert['request']['query'] }}
     errors_{{ alert['name'] }} = get_count(url, time, data)
     total_count = get_count(url, time, total_data)
-    check_count(errors_{{ alert['name'] }}, {{ alert['name'] }}, total_count)
+    check_count(errors_{{ alert['name'] }}, "{{ alert['name'] }}", total_count)
 
 {% endfor %}
 
@@ -42,8 +42,8 @@ def check_count(err_count, err_code, total_count):
     else:
         print(f"Percentage of errors {err_code} is {err_percentage}%! Sending e-mail...")
         alert_type = "firing"
-        alert_subject = f"Превышено пороговое значение ошибок {err_code}!"
-        alert_text = f"{err_percentage}% обращений ({err_count}/{total_count}) вернули код ошибки {err_code}!"
+        alert_subject = f"A lot of errors {err_code}!"
+        alert_text = f" more than {err_percentage}% ({err_count}/{total_count}) requests return {err_code}"
         mail.sendmail(alert_type, alert_subject, alert_text)
         timer.sleep(600)
 
