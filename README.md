@@ -20,7 +20,7 @@ Look to `./conf/*.examples` files to know more.
 
 #### elasticsearch
 `elasticsearch` section contains basic info about your Elasticsearch:
-- `host`: MUST starts with `http://` or `https://` prefix and do not contain slash (`/`) in the end. Default value is http://127.0.0.1
+- `host`: MUST starts with `http://` or `https://` prefix and do not contain slash (`/`) in the end. Default value is `http://127.0.0.1`
 - `port`: just port of your elasticsearch. Default is `9200`
 - `kibana_url`: you can place here url to your Kibana dashboard. When app sends e-mail, it contain a big button "look in Kibana". Default is `None`
 
