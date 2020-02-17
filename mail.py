@@ -19,7 +19,7 @@ def sendmail(alert_type, alert_subject, alert_text):
     from_address = conf.EMAIL_FROM
     notify_to = conf.EMAIL_RECEIVERS
 
-    message_template = read_template('alert.j2')
+    message_template = read_template('./templates/alert.j2')
 
     s = smtplib.SMTP(host='localhost')
     s.starttls()
