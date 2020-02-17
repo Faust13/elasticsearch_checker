@@ -11,13 +11,11 @@ with open("./conf/config.yml", 'r') as stream:
 
 ES_HOST = config['elasticsearch'].get('host', '127.0.0.1')
 ES_PORT = config['elasticsearch'].get('port', '9200')
-KIBANA_URL = config['elasticsearch']['kibana_url']
-STATS_FOR = config['request']['stats_for']
+KIBANA_URL = config['elasticsearch'].get('kibana_url', None)
+STATS_FOR = config['request'].get('stats_for', "10m")
 QUALITY_GATE = int(config['rules'].get('quality_gate', 10))
-PERIOD = timedelta(seconds=config['request']['interval'])
-EMAIL_FROM = config['email']['from']
-EMAIL_PASSWD = config['email']['password']
-EMAIL_RECEIVERS = config['email']['to']
-
+PERIOD = timedelta(seconds=config['request'].get('interval', 5))
+EMAIL_FROM = config['email'].get('from', "elastic_checker@example.com")
+EMAIL_RECEIVERS = config['email'].get('to', "example@example.com")
 
 HEADERS = {'Content-type': 'application/json'}
