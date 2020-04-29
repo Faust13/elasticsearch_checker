@@ -54,7 +54,7 @@ rules:
     expr: err_percentage > 5
     type: 'count'
     request:
-      query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 400, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
+      query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 400, "lte" : 499}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
       target_index: 'nginx-access-*'
     silence: 600 
 ```
