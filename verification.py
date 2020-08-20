@@ -20,3 +20,17 @@ def check_url(es_host, es_port, es_index) -> str:
             raise SystemExit("ERROR: Elasticsearch cluster not ready. Cluster status is '%s'" % result['status'])
     else:
         raise SystemExit("ERROR: Value of variable 'url' is incorrect: %s" % url)
+
+def check_search_url(es_host, es_port, es_index) -> str:
+    url_checker = f"{es_host}:{es_port}/_cluster/health"
+    print(url_checker)
+    url = f"{es_host}:{es_port}/{es_index}/_search"
+    if re.match(r"^(http|https):\/\/[^ ]*$", url):
+        r = requests.get(url_checker)
+        result = r.json()
+        if result['status'] == 'green' or result['status'] == 'yellow':
+            return url
+        else:
+            raise SystemExit("ERROR: Elasticsearch cluster not ready. Cluster status is '%s'" % result['status'])
+    else:
+        raise SystemExit("ERROR: Value of variable 'url' is incorrect: %s" % url)

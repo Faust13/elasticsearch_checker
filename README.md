@@ -44,18 +44,18 @@
 rules:
   - name: '5xx' #имя
     expr: err_percentage > 5 # когда true - отправить алерт
-    type: 'count' #Тип метрики. Пока поддеживается только 'count'.
+    type: 'count' #Тип метрики. Пока поддеживается только 'count' и 'top_hit'.
     request: #инфо для запроса
       query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 500, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}' #query for search
       target_index: 'nginx-access-*' #целевой index в эластике
     silence: 600 #если алерт отправлен - приостановить скраппиг на %silence% секунд
 
-  - alert: '4xx'
-    expr: err_percentage > 5
-    type: 'count'
+  - alert: 'top_ip'
+    expr: item['doc_count'] > 30 
+    type: 'top_hit'
     request:
-      query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 400, "lte" : 499}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
-      target_index: 'nginx-access-*'
+      query: '{"aggs":{"2":{"terms":{"field" : "remote.keyword", "order":{"_count": "desc"},"size": 5}}},"size": 0,"_source": {"excludes": []},"stored_fields": ["*"],"script_fields": {},"docvalue_fields": [{"field": "@timestamp","format": "date_time"}],"query": {"bool": {"must": [],"filter": [{"match_all": {}},{"range": {"@timestamp": {"format": "strict_date_optional_time","gt": "now-"+time}}}],"should": [],"must_not": []}}}'
+      target_index: 'nginx-*'
     silence: 600 
 ```
 Чтобы узнать больше о правилах формирования запрса в Elasticsearch через count API, ознакомьтесь с [документацией](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-count.html)

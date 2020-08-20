@@ -44,7 +44,7 @@ Rules file looks like:
 rules:
   - name: '5xx' #alert name
     expr: err_percentage > 5 # when expression is true application will send alert.
-    type: 'count' #type of metric. Only 'count' supported now.
+    type: 'count' #type of metric. Only 'count' and 'top_hit' supported now.
     request: #info for request
       query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 500, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}' #query for search
       target_index: 'nginx-access-*' #target index name
