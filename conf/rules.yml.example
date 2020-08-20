@@ -12,3 +12,11 @@ rules:
     request:
       query: '{"query":{"bool":{"must":[{"range":{"code":{"gte" : 400, "lte" : 599}}},{"range":{"@timestamp":{"gt": "now-"+time}}}]}}}'
       target_index: 'nginx-access-*'
+    
+  - alert: 'top_ip'
+    expr: item['doc_count'] > 30 
+    type: 'top_hit'
+    request:
+      query: '{"aggs":{"2":{"terms":{"field" : "remote.keyword", "order":{"_count": "desc"},"size": 5}}},"size": 0,"_source": {"excludes": []},"stored_fields": ["*"],"script_fields": {},"docvalue_fields": [{"field": "@timestamp","format": "date_time"}],"query": {"bool": {"must": [],"filter": [{"match_all": {}},{"range": {"@timestamp": {"format": "strict_date_optional_time","gt": "now-"+time}}}],"should": [],"must_not": []}}}'
+      target_index: 'nginx-*'
+    silence: 600

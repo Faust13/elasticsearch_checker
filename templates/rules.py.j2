@@ -1,6 +1,6 @@
 from timeloop import Timeloop
 import config as conf
-from verification import check_time, check_url
+from verification import check_time, check_url, check_search_url
 import time as timer
 import simplejson as json
 import requests
@@ -45,7 +45,27 @@ def check_count_{{ alert['name'] }}(err_count, err_code, total_count):
         timer.sleep({{ alert['silence'] }})
     else:
         print(f"It's fine! Percentage of errors {err_code} is {err_percentage}% ({err_count}/{total_count})")
-        
+
+{% elif 'top_hit' in alert['type'] %}
+
+url_{{ alert['name']}} = check_url(conf.ES_HOST, conf.ES_PORT, "{{ alert['request']['target_index'] }}")
+
+@tl.job(interval=conf.PERIOD)
+def check_data_{{ alert['name'] }}_loop():
+    data = {{ alert['request']['query'] }}
+    results_{{ alert['name'] }} = search(url_{{ alert['name']}}, time, data)['aggregations']['2']['buckets']
+    for item in results_{{ alert['name'] }}:
+        print(item['key'])
+def check_count_{{ alert['name'] }}(err_count, err_code, total_count):
+    err_percentage = round(err_count * 100 / total_count, 2)
+    if {{ alert['expr'] }}:
+        print(f"Percentage of errors {err_code} is {err_percentage}%! Sending e-mail...")
+        alert_type = "firing"
+        alert_subject = f"A lot of errors {err_code}!"
+        alert_text = f" more than {err_percentage}% ({err_count}/{total_count}) requests return {err_code}"
+        mail.sendmail(alert_type, alert_subject, alert_text)
+        timer.sleep({{ alert['silence'] }})
+
 {% endif %}
 {% endfor %}
 
@@ -55,5 +75,10 @@ def get_count(url, time, data):
     result = r.json()
     count = result['count']
     return count
+
+def search(url, time, data):
+    r = requests.get(url, data=json.dumps(data), headers=conf.HEADERS)
+    result = r.json()
+    return result
 
 tl.start(block=True)

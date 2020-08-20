@@ -4,8 +4,8 @@ elasticsearch:
   kibana_url: 'http://kibanaurl.ru/app/kibana#/dashboard/e7aac500-49b8-11ea-9397-e9a9cddae543'
 
 request:
-  stats_for: '10m'
-  interval: 1
+  stats_for: '1m'
+  interval: 60
 
 email:
   from: 'monit@example.ru'
